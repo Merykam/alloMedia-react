@@ -1,12 +1,15 @@
 
 import LoginSignup from './Components/LoginSignup/LoginSignup';
+import Routes from './Components/Routes'
 
 function App() {
  
 
   return (
     <div>
-      <LoginSignup/>
+      <Routes/>
+    
+
     </div>
   );
 

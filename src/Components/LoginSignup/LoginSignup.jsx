@@ -3,6 +3,7 @@ import './LoginSignup.css'
 import axios from 'axios';
 
 
+
 const LoginSignup = () => {
 
 
@@ -29,11 +30,25 @@ const LoginSignup = () => {
         }
     };
 
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post('http://localhost:8000/api/auth/signin', formData);
+            console.log(response.data); // Gérer la réponse de l'API ici
+            // Réinitialiser le formulaire ou rediriger l'utilisateur après l'inscription réussie
+        } catch (error) {
+            console.error(error); // Gérer les erreurs ici
+        }
+    };
+
     const [action, setAction]=useState("Login");
   return (
     <div className='container'>
 
-    <form onSubmit={handleSignup}>
+
+    <form  onSubmit={ action === "Sign up"? handleSignup : handleLogin}>
 
      
       <div className='header'>
@@ -76,8 +91,12 @@ const LoginSignup = () => {
         </div>
       </div>
       </form>
+
     </div>
-  )
+
+    
+  );
+  
 }
 
 export default LoginSignup
