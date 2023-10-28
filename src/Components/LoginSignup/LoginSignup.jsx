@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import './LoginSignup.css'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+
 
 
 
 const LoginSignup = () => {
-
+    const navigate = useNavigate()
 
     const [formData, setFormData] = useState({
         name: '',
@@ -25,6 +28,8 @@ const LoginSignup = () => {
             const response = await axios.post('http://localhost:8000/api/auth/signup', formData);
             console.log(response.data); // Gérer la réponse de l'API ici
             // Réinitialiser le formulaire ou rediriger l'utilisateur après l'inscription réussie
+
+
         } catch (error) {
             console.error(error); // Gérer les erreurs ici
         }
@@ -36,7 +41,28 @@ const LoginSignup = () => {
 
         try {
             const response = await axios.post('http://localhost:8000/api/auth/signin', formData);
-            console.log(response.data); // Gérer la réponse de l'API ici
+            console.log(response.data); 
+            if (response.data.success) {
+                
+                const name = response.data.data.name;
+                const role = response.data.data.role;
+                const token = response.data.data.token;
+                Cookies.set('token', token, { expires: 1 / 24 });
+
+                switch(role){
+                    case 'livreur': navigate('dashboard/livreur', { state: {name, role} })
+                        break;
+                    case 'client': navigate('dashboard/client', { state: {name, role} })
+                        break;
+                    case 'manager': navigate('dashboard/manager', { state: {name, role} })
+                        break;
+                     default:
+                            console.log(`the user has no role`);
+                }
+                console.log(name);
+                
+            }
+            // Gérer la réponse de l'API ici
             // Réinitialiser le formulaire ou rediriger l'utilisateur après l'inscription réussie
         } catch (error) {
             console.error(error); // Gérer les erreurs ici
