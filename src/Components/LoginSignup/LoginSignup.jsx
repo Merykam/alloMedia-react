@@ -8,6 +8,8 @@ import Cookies from 'js-cookie';
 
 
 const LoginSignup = () => {
+
+    
     const navigate = useNavigate()
 
     const [formData, setFormData] = useState({
@@ -26,12 +28,11 @@ const LoginSignup = () => {
 
         try {
             const response = await axios.post('http://localhost:8000/api/auth/signup', formData);
-            console.log(response.data); // Gérer la réponse de l'API ici
-            // Réinitialiser le formulaire ou rediriger l'utilisateur après l'inscription réussie
+            console.log(response.data); 
 
 
         } catch (error) {
-            console.error(error); // Gérer les erreurs ici
+            console.error(error); 
         }
     };
 
@@ -62,14 +63,15 @@ const LoginSignup = () => {
                 console.log(name);
                 
             }
-            // Gérer la réponse de l'API ici
-            // Réinitialiser le formulaire ou rediriger l'utilisateur après l'inscription réussie
+           
         } catch (error) {
-            console.error(error); // Gérer les erreurs ici
+            console.error(error); 
         }
     };
 
     const [action, setAction]=useState("Login");
+
+   
   return (
     <div className='container'>
 
@@ -97,23 +99,21 @@ const LoginSignup = () => {
             Forget password ? <span>Click here !</span>
         </div>
          : 
-         <div className='input'>
-         <input placeholder='  Enter your role' type="text" name="role" onChange={handleInputChange}/>
-     </div>
-        //   <div className='input'>
+       
+          <div className='input'>
             
-        //     <select name="role" id="">
-        //         <option value="">Client</option>
-        //         <option value="">Deliveryman</option>
-        //     </select>
+            <select name="role" id="" onChange={handleInputChange}>
+                <option value="livreur">livreur</option>
+                <option value="client">Client</option>
+            </select>
 
-        // </div>
+        </div>
          }
        
         <div className='submit-container'>
-            <button type="submit">Register</button>
-            <div className={action=="Login"?"submit gray":"submit"} onClick={()=>{setAction("Sign up")}} >Sign Up</div>
-            <div  className={action=="Sign up"?"submit gray":"submit"} onClick={()=>{setAction("Login")}}>Login</div>
+          
+            <button type={action == "Sign up" ? 'submit' : 'button'} className={action=="Login"?"submit gray":"submit"} onClick={()=>{setAction("Sign up")}} >Sign Up</button>
+            <button   className={action=="Sign up"?"submit gray":"submit"} onClick={()=>{setAction("Login")}} type={action == "Login" ? 'submit' : 'button'} >Login</button>
         </div>
       </div>
       </form>
