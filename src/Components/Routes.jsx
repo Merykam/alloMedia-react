@@ -6,6 +6,8 @@ import LoginSignup from './LoginSignup/LoginSignup';
 import Livreur from './Dashboards/Livreur';
 import Manager from './Dashboards/Manager';
 import Client from './Dashboards/Client';
+import ForgetPassword from './ForgetPassword';
+import ResetPassword from './ResetPassword';
 
 
 
@@ -18,6 +20,8 @@ const MainRoutes = () => {
         <Route path="/dashboard/livreur" element={<Livreur/>}/>
         <Route path="/dashboard/manager" element={<Manager/>}/>
         <Route path="/dashboard/client" element={<Client/>}/>
+        <Route path="/forgetPassword" element={<ForgetPassword/>}/>
+        <Route path="/reset-password/:token" element={<ResetPassword/>}/>
       </Routes>
     </div>
   )

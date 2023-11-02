@@ -1,103 +1,50 @@
-import React, { useState } from 'react'
-import './LoginSignup.css'
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import Routes from '../Routes'
+import { useParams } from 'react-router-dom';
 
 
 
+const ResetPassword = () => {
+    const { token } = useParams();
 
-const LoginSignup = () => {
-
-    
-    const navigate = useNavigate()
-    const [errorMessage, setErrorMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
+    // const encodedToken = token
 
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        role:''
+        newPassword: ''
+       
     });
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSignup = async (e) => {
+    const handleResetPassword = async (e) => {
         e.preventDefault();
 
         try {
-            console.log(formData)
-            const response = await axios.post('http://localhost:8000/api/auth/signup', formData);
-            //console.log(response.data);
-            if(response.data.message){
-                setSuccessMessage(response.data.message)
-            }
-        
-
-
-        } catch (error) {
            
-             setErrorMessage(error.response.data.error)
-            // console.error(error); 
-        }
-    };
-
-
-    const handleLogin = async (e) => {
-        e.preventDefault();
-
-        try {
-            const response = await axios.post('http://localhost:8000/api/auth/signin', formData);
+            const response = await axios.post(`http://localhost:8000/api/auth/reset-password/${token}`, formData);
             console.log(response.data); 
-            if (response.data.success) {
-                const name = response.data.data.name;
-                const role = response.data.data.role;
-                const token = response.data.data.token;
-                Cookies.set('token', token, { expires: 1 / 24 });
 
-                switch(role){
-                    case 'livreur': navigate('dashboard/livreur', { state: {name, role} })
-                        break;
-                    case 'client': navigate('dashboard/client', { state: {name, role} })
-                        break;
-                    case 'manager': navigate('dashboard/manager', { state: {name, role} })
-                        break;
-                     default:
-                            console.log(`the user has no role`);
-                }
-                console.log(name);
-                
-            }else{
-                console.log(response.data.error);
-            }
-           
+
         } catch (error) {
-            
             console.error(error); 
         }
     };
+  // return (
+  //   <div>
+  //     <form onSubmit={handleResetPassword}>
+  //       <input name='newPassword' type="password" placeholder='Enter new password' onChange={handleInputChange}/>
+  //       <button type='submit'>Submit</button>
+  //     </form>
+  //   </div>
+  // )
 
-    const [action, setAction]=useState("Login");
 
-   
-
-return (
+  return (
     
-    
+
     <section style={{height:'100vh', width:'100vw'}} className='bg-blue-50'>
-
-<div className='grid justify-items-center justify-center'>
-
-{successMessage? <div className="text-green-500">{successMessage}</div> : setErrorMessage? <div className="text-red-500">{errorMessage}</div> : ""
-} 
-
-</div>
-    
-   
     <div className="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5">
         <div className="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden" style={{ maxWidth: '1000px' }}>
             <div className="md:flex w-full">
@@ -107,84 +54,34 @@ return (
                 </div>
                 <div className="w-full md:w-1/2 py-10 px-5 md:px-10 bg-blue-200">
                     <div className="text-center mb-10">
-                    <div className="flex -mx-3">
-                            <div className="w-1/2 px-3 mb-5">
-                                <button className="block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold" type={action == "Sign up" ? 'submit' : 'button'}  onClick={()=>{setAction("Sign up")}}>REGISTER NOW</button>
-                            </div>
-                            <div className="w-1/2 px-3 mb-5">
-                                <button className="block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold" cl onClick={()=>{setAction("Login")}} type={action == "Login" ? 'submit' : 'button'}>Login</button>
-                            </div>
-                        </div>
-                        <h1 className="font-bold text-3xl text-sky-900 ">{action}</h1>
-                        <p>Enter your information to register</p>
+                        <h1 className="font-bold text-3xl text-sky-900 ">Reset Password </h1>
+                        <p>Enter New password</p>
                     </div>
                     <div>
+                        <form onSubmit={handleResetPassword}>
+
+                      
                         
-                        <form onSubmit={ action === "Sign up"? handleSignup : handleLogin}>
-
                         <div className="flex -mx-3">
-                        {action==="Login"? <div></div> :  
-                            <div className="w-full px-3 mb-5">
-                                <label className="text-xs font-semibold px-1">First name</label>
-                                <div className="flex">
-                                    <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
-                                    <input name='name' type="text" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="John" onChange={handleInputChange} />
-                                </div>
-                            </div>
-                        }
-                        </div>
-                        <div className="flex -mx-3">
-                            <div className="w-full px-3 mb-5">
-                                <label className="text-xs font-semibold px-1">Email</label>
-                                <div className="flex">
-                                    <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
-                                    <input name='email' type="email" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="johnsmith@example.com" onChange={handleInputChange} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex -mx-3">
-                            <div className={action==="Login"? "w-full px-3 mb-12": 'w-1/2 px-3 mb-12'} >
-                                <label  className="text-xs font-semibold px-1">Password</label>
+                            <div className="w-full px-3 mb-12" >
+                                <label  className="text-xs font-semibold px-1">New password</label>
                                 <div className="flex">
                                     <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
-                                    <input name='password' type="password" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************" onChange={handleInputChange} />
+                                    <input name='newPassword' type="password" placeholder='Enter new password'className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"/>
                                 </div>
                             </div>
 
-                            {action==="Login"? <div></div> :  
-                            <div className="w-1/2 px-3 mb-12">
-                                <label  className="text-xs font-semibold px-1">Role</label>
-                                <div className="flex">
-                                    <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
-
-                                        <select  className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="role" id="" onChange={handleInputChange} >
-                                        <option value="livreur" onChange={handleInputChange}>livreur</option>
-                                        <option value="client" onChange={handleInputChange}>client</option>
-                                      
-                                        </select>
-                                    {/* <input type="text" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************"/> */}
-                                </div>
-                            </div>
-                        }
+                           
                         </div>
 
                        
                         <div className="flex -mx-3">
-                            <div className="w-full px-3 mb-5">
-                                <button className="block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold" type='submit'>Submit</button>
+                            <div className="w-full mb-5">
+                                <button className="block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-1 py-3 font-semibold" type='submit'>Submit</button>
                             </div>
-                            {/* <div className="w-1/2 px-3 mb-5">
-                                <button className="block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold" cl onClick={()=>{setAction("Login")}} type={action == "Login" ? 'submit' : 'button'}>Login</button>
-                            </div> */}
+                       
                         </div>
 
-                        {action==="Login"? 
-                            <div className="font-bold text-sky-900 ">
-                                Forget password ? <a href='/forgetPassword'>Click here !</a>
-                            </div>
-                            : 
-                            ""
-                        }
 
                         </form>
                     </div>
@@ -201,7 +98,6 @@ return (
 
 
   )
-  
 }
 
-export default LoginSignup
+export default ResetPassword
