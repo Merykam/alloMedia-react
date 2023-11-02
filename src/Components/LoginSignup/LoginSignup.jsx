@@ -57,7 +57,10 @@ const LoginSignup = () => {
                 const name = response.data.data.name;
                 const role = response.data.data.role;
                 const token = response.data.data.token;
+                const isVerified= response.data.data.isVerified;
                 Cookies.set('token', token, { expires: 1 / 24 });
+                Cookies.set('role', role);
+                Cookies.set('isVerified', isVerified);
 
                 switch(role){
                     case 'livreur': navigate('dashboard/livreur', { state: {name, role} })
@@ -109,10 +112,10 @@ return (
                     <div className="text-center mb-10">
                     <div className="flex -mx-3">
                             <div className="w-1/2 px-3 mb-5">
-                                <button className="block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold" type={action == "Sign up" ? 'submit' : 'button'}  onClick={()=>{setAction("Sign up")}}>REGISTER NOW</button>
+                                <button className=" bg-skyy-600 block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold" type={action == "Sign up" ? 'submit' : 'button'}  onClick={()=>{setAction("Sign up")}}>REGISTER NOW</button>
                             </div>
                             <div className="w-1/2 px-3 mb-5">
-                                <button className="block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold" cl onClick={()=>{setAction("Login")}} type={action == "Login" ? 'submit' : 'button'}>Login</button>
+                                <button className="bg-skyy-600 block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold" cl onClick={()=>{setAction("Login")}} type={action == "Login" ? 'submit' : 'button'}>Login</button>
                             </div>
                         </div>
                         <h1 className="font-bold text-3xl text-sky-900 ">{action}</h1>
@@ -158,8 +161,8 @@ return (
                                     <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
 
                                         <select  className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="role" id="" onChange={handleInputChange} >
-                                        <option value="livreur" onChange={handleInputChange}>livreur</option>
-                                        <option value="client" onChange={handleInputChange}>client</option>
+                                        <option value="livreur" >livreur</option>
+                                        <option value="client">client</option>
                                       
                                         </select>
                                     {/* <input type="text" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************"/> */}
@@ -171,7 +174,7 @@ return (
                        
                         <div className="flex -mx-3">
                             <div className="w-full px-3 mb-5">
-                                <button className="block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold" type='submit'>Submit</button>
+                                <button className=" bg-sky-600 block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold" type='submit'>Submit</button>
                             </div>
                             {/* <div className="w-1/2 px-3 mb-5">
                                 <button className="block w-full max-w-xs mx-auto bg-sky-700 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold" cl onClick={()=>{setAction("Login")}} type={action == "Login" ? 'submit' : 'button'}>Login</button>

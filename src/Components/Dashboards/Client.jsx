@@ -11,20 +11,32 @@ const Client = () => {
   const navigate = useNavigate()
 
   const storedToken = Cookies.get('token');
+  const role = Cookies.get('role');
+  
   console.log(storedToken);
-  const decodedToken = jwt.verify(storedToken, 'arrrrrryskldmùdùfnhgzfdcevnkorp^rfnfbbfvdvd');
-  console.log(decodedToken);
+  console.log(role);
+ 
+  // const decodedToken = jwt.verify(storedToken, 'arrrrrryskldmùdùfnhgzfdcevnkorp^rfnfbbfvdvd');
+  // console.log(decodedToken);
   
   useEffect(()=>{
-    // check token
+
     if(!storedToken){
       console.log("fiiiiiiiin token");
-      navigate('/');
-
-
+      navigate('/'); 
+    }
+    if(role !== "client"){
+      
+        navigate('/toverify'); 
+    
     
     }
 
+    const isVerified = Cookies.get('isVerified');
+    console.log(isVerified);
+    if(isVerified == false){
+      navigate('/toverify'); 
+    }
 
 
 
@@ -32,10 +44,15 @@ const Client = () => {
 
    
     const handleLogout = async () => {
+      const storedToken = Cookies.get('token');
+      console.log(storedToken);
         try {
+
           
-          await axios.get('http://localhost:8000/api/auth/signout');
+          await axios.get(`http://localhost:8000/api/auth/signout/${storedToken}`);
     
+          Cookies.remove('token')
+          navigate('/')
          
        
         } catch (error) {
@@ -119,7 +136,7 @@ const Client = () => {
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
                       <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                    Hello <span className=' font-bold '>Adem</span> your role is <span className=' font-bold '>Client</span>
+                    Hello <span className='lg font-bold '>{location.state.role}</span> your role is <span className=' font-bold '>{location.state.name}</span>
                       </p>
                       <a href="#pablo" className="font-normal text-pink-500">Show more</a>
                     </div>
@@ -133,7 +150,7 @@ const Client = () => {
           <div className="flex flex-wrap items-center md:justify-between justify-center">
             <div className="w-full md:w-6/12 px-4 mx-auto text-center">
               <div className="text-sm text-blueGray-500 font-semibold py-1">
-                 <button onClick={handleLogout}>Logout</button>              </div>
+                 <button onClick={handleLogout}>Logout</button>          </div>
             </div>
           </div>
         </div>

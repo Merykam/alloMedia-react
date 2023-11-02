@@ -8,6 +8,7 @@ import Manager from './Dashboards/Manager';
 import Client from './Dashboards/Client';
 import ForgetPassword from './ForgetPassword';
 import ResetPassword from './ResetPassword';
+import Toverify from './Toverify';
 
 
 
@@ -22,6 +23,7 @@ const MainRoutes = () => {
         <Route path="/dashboard/client" element={<Client/>}/>
         <Route path="/forgetPassword" element={<ForgetPassword/>}/>
         <Route path="/reset-password/:token" element={<ResetPassword/>}/>
+        <Route path="/toverify" element={<Toverify/>}/>
       </Routes>
     </div>
   )
